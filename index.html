@@ -13,7 +13,6 @@
         }
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         
-        /* Header */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -25,7 +24,6 @@
         header h1 { font-size: 2em; margin-bottom: 12px; }
         header p { opacity: 0.9; font-size: 1.1em; }
         
-        /* Search */
         .search-box {
             background: white;
             padding: 24px;
@@ -44,7 +42,6 @@
         }
         .search-box input:focus { border-color: #667eea; }
         
-        /* Stats */
         .stats {
             display: flex;
             gap: 16px;
@@ -71,7 +68,6 @@
             margin-top: 4px;
         }
         
-        /* Category filters */
         .categories {
             display: flex;
             gap: 8px;
@@ -92,7 +88,6 @@
             border-color: #667eea;
         }
         
-        /* Results */
         .results { display: flex; flex-direction: column; gap: 16px; }
         
         .pain-card {
@@ -131,13 +126,6 @@
             color: #888;
             font-size: 0.85em;
         }
-        .pain-card .meta span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        /* Pain level bar */
         .pain-bar {
             width: 100%;
             height: 6px;
@@ -151,7 +139,6 @@
             border-radius: 3px;
         }
         
-        /* Footer */
         footer {
             text-align: center;
             padding: 40px;
@@ -171,13 +158,13 @@
             <input type="text" id="searchInput" placeholder="搜索关键词，如：笔记、外卖、客服..." oninput="filterResults()">
         </div>
         
-        <div class="stats" id="stats">
+        <div class="stats">
             <div class="stat-card">
                 <div class="number" id="totalCount">10</div>
                 <div class="label">痛点总数</div>
             </div>
             <div class="stat-card">
-                <div class="number" id="categoryCount">6</div>
+                <div class="number">6</div>
                 <div class="label">覆盖行业</div>
             </div>
             <div class="stat-card">
@@ -196,9 +183,7 @@
             <div class="cat-tag" onclick="filterByCategory('社交娱乐')">社交娱乐</div>
         </div>
         
-        <div class="results" id="results">
-            <!-- Results will be inserted here -->
-        </div>
+        <div class="results" id="results"></div>
         
         <footer>
             <p>痛点雷达 MVP - 数据来源：知乎/微博/即刻</p>
@@ -206,15 +191,19 @@
     </div>
     
     <script>
-        // Load data
-        let allData = [];
-        
-        fetch('/tldr-landing/data.json')
-            .then(r => r.json())
-            .then(data => {
-                allData = data.pain_points;
-                renderResults(allData);
-            });
+        // Data embedded directly
+        const allData = [
+            {"id": 1, "keyword": "笔记软件", "title": "印象笔记越来越慢", "content": "印象笔记越来越慢，付费会员还涨价，功能越来越杂，Evernote根本没法用", "platform": "知乎", "category": "效率工具", "pain_level": 8, "frequency": 156},
+            {"id": 2, "keyword": "邮箱", "title": "每天处理100封邮件", "content": "每天处理100封邮件，根本回不过来，邮件分类功能完全是鸡肋", "platform": "知乎", "category": "效率工具", "pain_level": 9, "frequency": 203},
+            {"id": 3, "keyword": "会议", "title": "开会1小时有用10分钟", "content": "开会1小时，真正有用的内容就10分钟，剩下都在扯皮", "platform": "微博", "category": "效率工具", "pain_level": 10, "frequency": 312},
+            {"id": 4, "keyword": "外卖", "title": "同一店App比小程序贵", "content": "同一个店，App价格比小程序贵2块，平台杀熟太明显了", "platform": "微博", "category": "生活服务", "pain_level": 7, "frequency": 89},
+            {"id": 5, "keyword": "客服", "title": "等半小时解决不了问题", "content": "找客服要等半小时，机器人听不懂人话，最后还是解决不了问题", "platform": "知乎", "category": "生活服务", "pain_level": 9, "frequency": 178},
+            {"id": 6, "keyword": "信用卡", "title": "还款提醒都没有", "content": "信用卡还款日到了没有任何提醒，晚了1天就上征信，太坑了", "platform": "微博", "category": "金融理财", "pain_level": 10, "frequency": 245},
+            {"id": 7, "keyword": "保险", "title": "条款看不懂出事不赔", "content": "保险条款几十页，看不懂，等真出事了发现这不赔那不赔", "platform": "知乎", "category": "金融理财", "pain_level": 9, "frequency": 198},
+            {"id": 8, "keyword": "课程", "title": "买课发现是录播", "content": "买了199的课，进去发现是录播，而且内容搜一下就能免费看", "platform": "知乎", "category": "教育学习", "pain_level": 8, "frequency": 134},
+            {"id": 9, "keyword": "挂号", "title": "三甲医院挂号难", "content": "三甲医院挂号要提前一周，根本抢不到，黄牛号贵3倍", "platform": "微博", "category": "健康医疗", "pain_level": 10, "frequency": 267},
+            {"id": 10, "keyword": "微信", "title": "工作生活群混一起", "content": "工作群和生活群混在一起，下班后还要回消息，根本没有生活", "platform": "微博", "category": "社交娱乐", "pain_level": 8, "frequency": 445}
+        ];
         
         let currentCategory = 'all';
         let currentSearch = '';
@@ -226,36 +215,24 @@
         
         function filterByCategory(cat) {
             currentCategory = cat;
-            
-            // Update active state
             document.querySelectorAll('.cat-tag').forEach(tag => {
                 tag.classList.remove('active');
                 if (tag.textContent === (cat === 'all' ? '全部' : cat)) {
                     tag.classList.add('active');
                 }
             });
-            
             applyFilters();
         }
         
         function applyFilters() {
             let filtered = allData.filter(item => {
-                // Category filter
-                if (currentCategory !== 'all' && item.category !== currentCategory) {
-                    return false;
-                }
-                
-                // Search filter
+                if (currentCategory !== 'all' && item.category !== currentCategory) return false;
                 if (currentSearch) {
                     const searchText = (item.title + ' ' + item.content + ' ' + item.keyword).toLowerCase();
-                    if (!searchText.includes(currentSearch)) {
-                        return false;
-                    }
+                    if (!searchText.includes(currentSearch)) return false;
                 }
-                
                 return true;
             });
-            
             renderResults(filtered);
         }
         
@@ -284,6 +261,9 @@
                 </div>
             ').join('');
         }
+        
+        // Initial render
+        renderResults(allData);
     </script>
 </body>
 </html>
