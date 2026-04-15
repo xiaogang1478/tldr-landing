@@ -209,7 +209,7 @@
         // Load data
         let allData = [];
         
-        fetch('data.json')
+        fetch('/tldr-landing/data.json')
             .then(r => r.json())
             .then(data => {
                 allData = data.pain_points;
