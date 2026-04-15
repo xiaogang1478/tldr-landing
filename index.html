@@ -5,152 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>痛点雷达 - MVP</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 12px;
-            margin-bottom: 24px;
-        }
-        header h1 { font-size: 2em; margin-bottom: 12px; }
-        header p { opacity: 0.9; font-size: 1.1em; }
-        
-        .search-box {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .search-box input {
-            width: 100%;
-            padding: 16px;
-            font-size: 1.1em;
-            border: 2px solid #eee;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .search-box input:focus { border-color: #667eea; }
-        
-        .stats {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            flex: 1;
-            min-width: 120px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .stat-card .number {
-            font-size: 2em;
-            font-weight: 700;
-            color: #667eea;
-        }
-        .stat-card .label {
-            color: #888;
-            font-size: 0.9em;
-            margin-top: 4px;
-        }
-        
-        .categories {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-        .cat-tag {
-            padding: 8px 16px;
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .cat-tag:hover, .cat-tag.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .results { display: flex; flex-direction: column; gap: 16px; }
-        
-        .pain-card {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border-left: 4px solid #667eea;
-        }
-        .pain-card .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-        .pain-card .title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-        .pain-card .badge {
-            padding: 4px 12px;
-            background: #667eea;
-            color: white;
-            border-radius: 12px;
-            font-size: 0.8em;
-        }
-        .pain-card .content {
-            color: #555;
-            margin-bottom: 12px;
-            line-height: 1.6;
-        }
-        .pain-card .meta {
-            display: flex;
-            gap: 16px;
-            color: #888;
-            font-size: 0.85em;
-        }
-        .pain-bar {
-            width: 100%;
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
-            margin-top: 12px;
-        }
-        .pain-bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 3px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-            font-size: 0.85em;
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333}
+        .container{max-width:900px;margin:0 auto;padding:20px}
+        header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:40px 20px;text-align:center;border-radius:12px;margin-bottom:24px}
+        header h1{font-size:2em;margin-bottom:12px}
+        header p{opacity:0.9;font-size:1.1em}
+        .search-box{background:white;padding:24px;border-radius:12px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+        .search-box input{width:100%;padding:16px;font-size:1.1em;border:2px solid #eee;border-radius:8px;outline:none;transition:border-color 0.2s}
+        .search-box input:focus{border-color:#667eea}
+        .stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+        .stat-card{flex:1;min-width:120px;background:white;padding:20px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+        .stat-card .number{font-size:2em;font-weight:700;color:#667eea}
+        .stat-card .label{color:#888;font-size:0.9em;margin-top:4px}
+        .categories{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+        .cat-tag{padding:8px 16px;background:white;border:1px solid #eee;border-radius:20px;cursor:pointer;transition:all 0.2s}
+        .cat-tag:hover,.cat-tag.active{background:#667eea;color:white;border-color:#667eea}
+        .results{display:flex;flex-direction:column;gap:16px}
+        .pain-card{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea}
+        .pain-card .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+        .pain-card .title{font-size:1.1em;font-weight:600;color:#1a1a1a}
+        .pain-card .badge{padding:4px 12px;background:#667eea;color:white;border-radius:12px;font-size:0.8em}
+        .pain-card .content{color:#555;margin-bottom:12px;line-height:1.6}
+        .pain-card .meta{display:flex;gap:16px;color:#888;font-size:0.85em}
+        .pain-bar{width:100%;height:6px;background:#eee;border-radius:3px;margin-top:12px}
+        .pain-bar .fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:3px}
+        footer{text-align:center;padding:40px;color:#888;font-size:0.85em}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎯 痛点雷达 MVP</h1>
+            <h1>&#128293; 痛点雷达 MVP</h1>
             <p>帮你找到用户抱怨最多的地方</p>
         </header>
         
@@ -174,13 +60,13 @@
         </div>
         
         <div class="categories" id="categories">
-            <div class="cat-tag active" onclick="filterByCategory('all')">全部</div>
-            <div class="cat-tag" onclick="filterByCategory('效率工具')">效率工具</div>
-            <div class="cat-tag" onclick="filterByCategory('生活服务')">生活服务</div>
-            <div class="cat-tag" onclick="filterByCategory('金融理财')">金融理财</div>
-            <div class="cat-tag" onclick="filterByCategory('教育学习')">教育学习</div>
-            <div class="cat-tag" onclick="filterByCategory('健康医疗')">健康医疗</div>
-            <div class="cat-tag" onclick="filterByCategory('社交娱乐')">社交娱乐</div>
+            <div class="cat-tag active" data-cat="all">全部</div>
+            <div class="cat-tag" data-cat="效率工具">效率工具</div>
+            <div class="cat-tag" data-cat="生活服务">生活服务</div>
+            <div class="cat-tag" data-cat="金融理财">金融理财</div>
+            <div class="cat-tag" data-cat="教育学习">教育学习</div>
+            <div class="cat-tag" data-cat="健康医疗">健康医疗</div>
+            <div class="cat-tag" data-cat="社交娱乐">社交娱乐</div>
         </div>
         
         <div class="results" id="results"></div>
@@ -191,75 +77,88 @@
     </div>
     
     <script>
-        // Data embedded directly
-        const allData = [
-            {"id": 1, "keyword": "笔记软件", "title": "印象笔记越来越慢", "content": "印象笔记越来越慢，付费会员还涨价，功能越来越杂，Evernote根本没法用", "platform": "知乎", "category": "效率工具", "pain_level": 8, "frequency": 156},
-            {"id": 2, "keyword": "邮箱", "title": "每天处理100封邮件", "content": "每天处理100封邮件，根本回不过来，邮件分类功能完全是鸡肋", "platform": "知乎", "category": "效率工具", "pain_level": 9, "frequency": 203},
-            {"id": 3, "keyword": "会议", "title": "开会1小时有用10分钟", "content": "开会1小时，真正有用的内容就10分钟，剩下都在扯皮", "platform": "微博", "category": "效率工具", "pain_level": 10, "frequency": 312},
-            {"id": 4, "keyword": "外卖", "title": "同一店App比小程序贵", "content": "同一个店，App价格比小程序贵2块，平台杀熟太明显了", "platform": "微博", "category": "生活服务", "pain_level": 7, "frequency": 89},
-            {"id": 5, "keyword": "客服", "title": "等半小时解决不了问题", "content": "找客服要等半小时，机器人听不懂人话，最后还是解决不了问题", "platform": "知乎", "category": "生活服务", "pain_level": 9, "frequency": 178},
-            {"id": 6, "keyword": "信用卡", "title": "还款提醒都没有", "content": "信用卡还款日到了没有任何提醒，晚了1天就上征信，太坑了", "platform": "微博", "category": "金融理财", "pain_level": 10, "frequency": 245},
-            {"id": 7, "keyword": "保险", "title": "条款看不懂出事不赔", "content": "保险条款几十页，看不懂，等真出事了发现这不赔那不赔", "platform": "知乎", "category": "金融理财", "pain_level": 9, "frequency": 198},
-            {"id": 8, "keyword": "课程", "title": "买课发现是录播", "content": "买了199的课，进去发现是录播，而且内容搜一下就能免费看", "platform": "知乎", "category": "教育学习", "pain_level": 8, "frequency": 134},
-            {"id": 9, "keyword": "挂号", "title": "三甲医院挂号难", "content": "三甲医院挂号要提前一周，根本抢不到，黄牛号贵3倍", "platform": "微博", "category": "健康医疗", "pain_level": 10, "frequency": 267},
-            {"id": 10, "keyword": "微信", "title": "工作生活群混一起", "content": "工作群和生活群混在一起，下班后还要回消息，根本没有生活", "platform": "微博", "category": "社交娱乐", "pain_level": 8, "frequency": 445}
+        var allData = [
+            {id:1,keyword:"笔记软件",title:"印象笔记越来越慢",content:"印象笔记越来越慢，付费会员还涨价，功能越来越杂，Evernote根本没法用",platform:"知乎",category:"效率工具",painLevel:8,frequency:156},
+            {id:2,keyword:"邮箱",title:"每天处理100封邮件",content:"每天处理100封邮件，根本回不过来，邮件分类功能完全是鸡肋",platform:"知乎",category:"效率工具",painLevel:9,frequency:203},
+            {id:3,keyword:"会议",title:"开会1小时有用10分钟",content:"开会1小时，真正有用的内容就10分钟，剩下都在扯皮",platform:"微博",category:"效率工具",painLevel:10,frequency:312},
+            {id:4,keyword:"外卖",title:"同一店App比小程序贵",content:"同一个店，App价格比小程序贵2块，平台杀熟太明显了",platform:"微博",category:"生活服务",painLevel:7,frequency:89},
+            {id:5,keyword:"客服",title:"等半小时解决不了问题",content:"找客服要等半小时，机器人听不懂人话，最后还是解决不了问题",platform:"知乎",category:"生活服务",painLevel:9,frequency:178},
+            {id:6,keyword:"信用卡",title:"还款提醒都没有",content:"信用卡还款日到了没有任何提醒，晚了1天就上征信，太坑了",platform:"微博",category:"金融理财",painLevel:10,frequency:245},
+            {id:7,keyword:"保险",title:"条款看不懂出事不赔",content:"保险条款几十页，看不懂，等真出事了发现这不赔那不赔",platform:"知乎",category:"金融理财",painLevel:9,frequency:198},
+            {id:8,keyword:"课程",title:"买课发现是录播",content:"买了199的课，进去发现是录播，而且内容搜一下就能免费看",platform:"知乎",category:"教育学习",painLevel:8,frequency:134},
+            {id:9,keyword:"挂号",title:"三甲医院挂号难",content:"三甲医院挂号要提前一周，根本抢不到，黄牛号贵3倍",platform:"微博",category:"健康医疗",painLevel:10,frequency:267},
+            {id:10,keyword:"微信",title:"工作生活群混一起",content:"工作群和生活群混在一起，下班后还要回消息，根本没有生活",platform:"微博",category:"社交娱乐",painLevel:8,frequency:445}
         ];
         
-        let currentCategory = 'all';
-        let currentSearch = '';
+        var currentCategory = "all";
+        var currentSearch = "";
         
         function filterResults() {
-            currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            currentSearch = document.getElementById("searchInput").value.toLowerCase();
             applyFilters();
         }
         
         function filterByCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.cat-tag').forEach(tag => {
-                tag.classList.remove('active');
-                if (tag.textContent === (cat === 'all' ? '全部' : cat)) {
-                    tag.classList.add('active');
+            var tags = document.querySelectorAll(".cat-tag");
+            for (var i = 0; i < tags.length; i++) {
+                tags[i].classList.remove("active");
+                if (tags[i].getAttribute("data-cat") === cat) {
+                    tags[i].classList.add("active");
                 }
-            });
+            }
             applyFilters();
         }
         
         function applyFilters() {
-            let filtered = allData.filter(item => {
-                if (currentCategory !== 'all' && item.category !== currentCategory) return false;
+            var filtered = [];
+            for (var i = 0; i < allData.length; i++) {
+                var item = allData[i];
+                if (currentCategory !== "all" && item.category !== currentCategory) continue;
                 if (currentSearch) {
-                    const searchText = (item.title + ' ' + item.content + ' ' + item.keyword).toLowerCase();
-                    if (!searchText.includes(currentSearch)) return false;
+                    var searchText = (item.title + " " + item.content + " " + item.keyword).toLowerCase();
+                    if (searchText.indexOf(currentSearch) === -1) continue;
                 }
-                return true;
-            });
+                filtered.push(item);
+            }
             renderResults(filtered);
         }
         
         function renderResults(items) {
-            const container = document.getElementById('results');
-            document.getElementById('totalCount').textContent = items.length;
+            var container = document.getElementById("results");
+            document.getElementById("totalCount").textContent = items.length;
             
             if (items.length === 0) {
-                container.innerHTML = '<p style="text-align:center;color:#888;padding:40px;">没有找到相关痛点</p>';
+                container.innerHTML = "<p style=\"text-align:center;color:#888;padding:40px\">没有找到相关痛点</p>";
                 return;
             }
             
-            container.innerHTML = items.map(item => '
-                <div class="pain-card">
-                    <div class="header">
-                        <div class="title">' + item.title + '</div>
-                        <div class="badge">' + item.category + '</div>
-                    </div>
-                    <div class="content">' + item.content + '</div>
-                    <div class="pain-bar"><div class="fill" style="width:' + (item.pain_level * 10) + '%"></div></div>
-                    <div class="meta">
-                        <span>🔥 热度 ' + item.frequency + '</span>
-                        <span>📊 痛度 ' + item.pain_level + '/10</span>
-                        <span>💬 ' + item.platform + '</span>
-                    </div>
-                </div>
-            ').join('');
+            var html = "";
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                html += "<div class=\"pain-card\">";
+                html += "<div class=\"header\">";
+                html += "<div class=\"title\">" + item.title + "</div>";
+                html += "<div class=\"badge\">" + item.category + "</div>";
+                html += "</div>";
+                html += "<div class=\"content\">" + item.content + "</div>";
+                html += "<div class=\"pain-bar\"><div class=\"fill\" style=\"width:" + (item.painLevel * 10) + "%\"></div></div>";
+                html += "<div class=\"meta\">";
+                html += "<span>&#128293; 热度 " + item.frequency + "</span>";
+                html += "<span>&#128202; 痛度 " + item.painLevel + "/10</span>";
+                html += "<span>&#128172; " + item.platform + "</span>";
+                html += "</div>";
+                html += "</div>";
+            }
+            container.innerHTML = html;
+        }
+        
+        // Setup category click handlers
+        var catTags = document.querySelectorAll(".cat-tag");
+        for (var i = 0; i < catTags.length; i++) {
+            catTags[i].addEventListener("click", function() {
+                filterByCategory(this.getAttribute("data-cat"));
+            });
         }
         
         // Initial render
