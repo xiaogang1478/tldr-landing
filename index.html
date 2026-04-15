@@ -415,11 +415,11 @@
         <!-- Stats -->
         <section class="stats-bar" id="about">
             <div class="stat-item">
-                <div class="stat-number">10</div>
+                <div class="stat-number">21</div>
                 <div class="stat-label">真实痛点案例</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">6</div>
+                <div class="stat-number">9</div>
                 <div class="stat-label">覆盖行业</div>
             </div>
             <div class="stat-item">
@@ -439,12 +439,14 @@
             </div>
             <div class="categories">
                 <div class="cat-pill active" data-cat="all">全部</div>
-                <div class="cat-pill" data-cat="效率工具">效率工具</div>
                 <div class="cat-pill" data-cat="生活服务">生活服务</div>
                 <div class="cat-pill" data-cat="金融理财">金融理财</div>
+                <div class="cat-pill" data-cat="职场">职场</div>
                 <div class="cat-pill" data-cat="教育学习">教育学习</div>
                 <div class="cat-pill" data-cat="健康医疗">健康医疗</div>
-                <div class="cat-pill" data-cat="社交娱乐">社交娱乐</div>
+                <div class="cat-pill" data-cat="出行">出行</div>
+                <div class="cat-pill" data-cat="娱乐">娱乐</div>
+                <div class="cat-pill" data-cat="科技">科技</div>
             </div>
         </section>
         
@@ -471,92 +473,6 @@
         </footer>
     </div>
     
-    <script>
-        var allData = [
-            {id:1,keyword:"笔记软件",title:"印象笔记越来越慢",content:"印象笔记越来越慢，付费会员还涨价，功能越来越杂，Evernote根本没法用",platform:"知乎",category:"效率工具",painLevel:8,frequency:156},
-            {id:2,keyword:"邮箱",title:"每天处理100封邮件",content:"每天处理100封邮件，根本回不过来，邮件分类功能完全是鸡肋",platform:"知乎",category:"效率工具",painLevel:9,frequency:203},
-            {id:3,keyword:"会议",title:"开会1小时有用10分钟",content:"开会1小时，真正有用的内容就10分钟，剩下都在扯皮",platform:"微博",category:"效率工具",painLevel:10,frequency:312},
-            {id:4,keyword:"外卖",title:"同一店App比小程序贵",content:"同一个店，App价格比小程序贵2块，平台杀熟太明显了",platform:"微博",category:"生活服务",painLevel:7,frequency:89},
-            {id:5,keyword:"客服",title:"等半小时解决不了问题",content:"找客服要等半小时，机器人听不懂人话，最后还是解决不了问题",platform:"知乎",category:"生活服务",painLevel:9,frequency:178},
-            {id:6,keyword:"信用卡",title:"还款提醒都没有",content:"信用卡还款日到了没有任何提醒，晚了1天就上征信，太坑了",platform:"微博",category:"金融理财",painLevel:10,frequency:245},
-            {id:7,keyword:"保险",title:"条款看不懂出事不赔",content:"保险条款几十页，看不懂，等真出事了发现这不赔那不赔",platform:"知乎",category:"金融理财",painLevel:9,frequency:198},
-            {id:8,keyword:"课程",title:"买课发现是录播",content:"买了199的课，进去发现是录播，而且内容搜一下就能免费看",platform:"知乎",category:"教育学习",painLevel:8,frequency:134},
-            {id:9,keyword:"挂号",title:"三甲医院挂号难",content:"三甲医院挂号要提前一周，根本抢不到，黄牛号贵3倍",platform:"微博",category:"健康医疗",painLevel:10,frequency:267},
-            {id:10,keyword:"微信",title:"工作生活群混一起",content:"工作群和生活群混在一起，下班后还要回消息，根本没有生活",platform:"微博",category:"社交娱乐",painLevel:8,frequency:445}
-        ];
-        
-        var currentCategory = "all";
-        var currentSearch = "";
-        
-        function filterResults() {
-            currentSearch = document.getElementById("searchInput").value.toLowerCase();
-            applyFilters();
-        }
-        
-        function filterByCategory(cat) {
-            currentCategory = cat;
-            var pills = document.querySelectorAll(".cat-pill");
-            for (var i = 0; i < pills.length; i++) {
-                pills[i].classList.remove("active");
-                if (pills[i].getAttribute("data-cat") === cat) {
-                    pills[i].classList.add("active");
-                }
-            }
-            applyFilters();
-        }
-        
-        function applyFilters() {
-            var filtered = [];
-            for (var i = 0; i < allData.length; i++) {
-                var item = allData[i];
-                if (currentCategory !== "all" && item.category !== currentCategory) continue;
-                if (currentSearch) {
-                    var searchText = (item.title + " " + item.content + " " + item.keyword).toLowerCase();
-                    if (searchText.indexOf(currentSearch) === -1) continue;
-                }
-                filtered.push(item);
-            }
-            renderResults(filtered);
-        }
-        
-        function renderResults(items) {
-            var container = document.getElementById("results");
-            
-            if (items.length === 0) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>没有找到相关痛点</p></div>';
-                return;
-            }
-            
-            var html = "";
-            for (var i = 0; i < items.length; i++) {
-                var item = items[i];
-                html += '<div class="pain-card">';
-                html += '<div class="pain-header">';
-                html += '<div class="pain-title">' + item.title + '</div>';
-                html += '<div class="pain-badge">' + item.category + '</div>';
-                html += '</div>';
-                html += '<div class="pain-content">' + item.content + '</div>';
-                html += '<div class="pain-bar"><div class="pain-bar-fill" style="width:' + (item.painLevel * 10) + '%"></div></div>';
-                html += '<div class="pain-meta">';
-                html += '<span>&#128293; ' + item.frequency + ' 讨论</span>';
-                html += '<span>&#128202; 痛度 ' + item.painLevel + '/10</span>';
-                html += '<span>&#128172; ' + item.platform + '</span>';
-                html += '</div>';
-                html += '</div>';
-            }
-            container.innerHTML = html;
-        }
-        
-        // Setup category click handlers
-        var pills = document.querySelectorAll(".cat-pill");
-        for (var i = 0; i < pills.length; i++) {
-            pills[i].addEventListener("click", function() {
-                filterByCategory(this.getAttribute("data-cat"));
-            });
-        }
-        
-        // Initial render
-        renderResults(allData);
-    </script>
+    <script src="data.js"></script>
 </body>
 </html>
