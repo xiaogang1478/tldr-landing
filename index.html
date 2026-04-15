@@ -3,257 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>痛点雷达 - 帮创业者找到用户抱怨最多的地方</title>
+    <title>痛点雷达 - MVP</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
             color: #333;
-            background: #fafafa;
         }
-        .container { max-width: 680px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         
         /* Header */
         header {
-            text-align: center;
-            padding: 60px 0 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            margin-bottom: 40px;
-        }
-        header h1 {
-            font-size: 2.2em;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        
-        /* Section */
-        section {
-            background: white;
+            padding: 40px 20px;
+            text-align: center;
             border-radius: 12px;
-            padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         }
-        section h2 {
-            font-size: 1.3em;
-            color: #1a1a1a;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #667eea;
+        header h1 { font-size: 2em; margin-bottom: 12px; }
+        header p { opacity: 0.9; font-size: 1.1em; }
+        
+        /* Search */
+        .search-box {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .search-box input {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1em;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-box input:focus { border-color: #667eea; }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-card .label {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 4px;
         }
         
-        /* Pain point cards */
-        .pain-card {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 16px 20px;
-            margin-bottom: 16px;
-            border-radius: 0 8px 8px 0;
+        /* Category filters */
+        .categories {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
         }
-        .pain-card .tag {
-            display: inline-block;
+        .cat-tag {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cat-tag:hover, .cat-tag.active {
             background: #667eea;
             color: white;
-            font-size: 0.75em;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-        .pain-card p {
-            color: #444;
-            font-size: 0.95em;
+            border-color: #667eea;
         }
         
-        /* CTA */
-        .cta {
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 12px;
-        }
-        .cta h2 { color: white; border: none; margin-bottom: 16px; }
-        .cta p { margin-bottom: 24px; opacity: 0.9; }
-        .cta-form {
-            display: flex;
-            gap: 12px;
-            max-width: 400px;
-            margin: 0 auto;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .cta-form input {
-            flex: 1;
-            min-width: 200px;
-            padding: 14px 18px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-        .cta-form button {
+        /* Results */
+        .results { display: flex; flex-direction: column; gap: 16px; }
+        
+        .pain-card {
             background: white;
-            color: #667eea;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid #667eea;
         }
-        .cta-form button:hover { transform: scale(1.05); }
+        .pain-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .pain-card .title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .pain-card .badge {
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+        .pain-card .content {
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .pain-card .meta {
+            display: flex;
+            gap: 16px;
+            color: #888;
+            font-size: 0.85em;
+        }
+        .pain-card .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
         
-        /* Quote */
-        .quote {
-            font-style: italic;
-            color: #666;
-            padding: 16px 20px;
-            border-left: 4px solid #ddd;
-            margin: 20px 0;
+        /* Pain level bar */
+        .pain-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-top: 12px;
+        }
+        .pain-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
         }
         
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 40px;
             color: #888;
             font-size: 0.85em;
         }
-        
-        /* Category title */
-        .cat-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #333;
-            margin: 24px 0 16px;
-            display: flex;
-            align-items: center;
-        }
-        .cat-title span { margin-left: 8px; font-size: 0.85em; color: #888; font-weight: normal; }
     </style>
 </head>
 <body>
-
-<header>
     <div class="container">
-        <h1>🎯 痛点雷达</h1>
-        <p>帮你找到用户抱怨最多的地方<br>在那里，你就能找到机会</p>
+        <header>
+            <h1>🎯 痛点雷达 MVP</h1>
+            <p>帮你找到用户抱怨最多的地方</p>
+        </header>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索关键词，如：笔记、外卖、客服..." oninput="filterResults()">
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="number" id="totalCount">10</div>
+                <div class="label">痛点总数</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="categoryCount">6</div>
+                <div class="label">覆盖行业</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">1256+</div>
+                <div class="label">数据来源</div>
+            </div>
+        </div>
+        
+        <div class="categories" id="categories">
+            <div class="cat-tag active" onclick="filterByCategory('all')">全部</div>
+            <div class="cat-tag" onclick="filterByCategory('效率工具')">效率工具</div>
+            <div class="cat-tag" onclick="filterByCategory('生活服务')">生活服务</div>
+            <div class="cat-tag" onclick="filterByCategory('金融理财')">金融理财</div>
+            <div class="cat-tag" onclick="filterByCategory('教育学习')">教育学习</div>
+            <div class="cat-tag" onclick="filterByCategory('健康医疗')">健康医疗</div>
+            <div class="cat-tag" onclick="filterByCategory('社交娱乐')">社交娱乐</div>
+        </div>
+        
+        <div class="results" id="results">
+            <!-- Results will be inserted here -->
+        </div>
+        
+        <footer>
+            <p>痛点雷达 MVP - 数据来源：知乎/微博/即刻</p>
+        </footer>
     </div>
-</header>
-
-<div class="container">
-
-    <!-- What is it -->
-    <section>
-        <h2>📌 什么是痛点雷达？</h2>
-        <p style="font-size:1.05em;">一个挖掘全网用户真实抱怨的工具。</p>
-        <p style="margin-top:12px;">帮你发现：哪些产品让用户受不了、哪些需求长期没人解决、哪些方向值得做。</p>
+    
+    <script>
+        // Load data
+        let allData = [];
         
-        <div class="quote">
-            "创业的本质，不是创造新东西，而是让用户的不满意消失。"
-        </div>
-    </section>
-
-    <!-- Cases -->
-    <section>
-        <h2>💡 真实痛点案例</h2>
+        fetch('data.json')
+            .then(r => r.json())
+            .then(data => {
+                allData = data.pain_points;
+                renderResults(allData);
+            });
         
-        <div class="cat-title">效率工具 <span>（8个）</span></div>
-        <div class="pain-card">
-            <div class="tag">笔记</div>
-            <p>"印象笔记越来越慢，付费还涨价，功能越做越杂。Evernote根本没法用。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">邮箱</div>
-            <p>"每天处理100封邮件根本回不过来，邮件分类完全是鸡肋。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">会议</div>
-            <p>"开会1小时，真正有用的就10分钟，剩下都在扯皮。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">任务</div>
-            <p>"用了5个任务管理App，最后还是用Excel，因为同步太慢。"</p>
-        </div>
+        let currentCategory = 'all';
+        let currentSearch = '';
         
-        <div class="cat-title">生活服务 <span>（6个）</span></div>
-        <div class="pain-card">
-            <div class="tag">外卖</div>
-            <p>"同一个店，App比小程序贵2块，平台杀熟太明显了。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">电商客服</div>
-            <p>"找客服等半小时，机器人听不懂人话，解决不了问题。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">快递</div>
-            <p>"快递被放代收点，丢了都不知道谁的责任。"</p>
-        </div>
+        function filterResults() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            applyFilters();
+        }
         
-        <div class="cat-title">金融理财 <span>（5个）</span></div>
-        <div class="pain-card">
-            <div class="tag">信用卡</div>
-            <p>"还款日没有任何提醒，晚1天就上征信，太坑了。"</p>
-        </div>
-        <div class="pain-card">
-            <div class="tag">保险</div>
-            <p>"条款几十页根本看不懂，出事了这不赔那不赔。"</p>
-        </div>
+        function filterByCategory(cat) {
+            currentCategory = cat;
+            
+            // Update active state
+            document.querySelectorAll('.cat-tag').forEach(tag => {
+                tag.classList.remove('active');
+                if (tag.textContent === (cat === 'all' ? '全部' : cat)) {
+                    tag.classList.add('active');
+                }
+            });
+            
+            applyFilters();
+        }
         
-        <div class="cat-title">教育学习 <span>（4个）</span></div>
-        <div class="pain-card">
-            <div class="tag">课程</div>
-            <p>"买了课进去发现是录播，内容网上搜一下就能免费看。"</p>
-        </div>
+        function applyFilters() {
+            let filtered = allData.filter(item => {
+                // Category filter
+                if (currentCategory !== 'all' && item.category !== currentCategory) {
+                    return false;
+                }
+                
+                // Search filter
+                if (currentSearch) {
+                    const searchText = (item.title + ' ' + item.content + ' ' + item.keyword).toLowerCase();
+                    if (!searchText.includes(currentSearch)) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+            
+            renderResults(filtered);
+        }
         
-        <div class="cat-title">健康医疗 <span>（4个）</span></div>
-        <div class="pain-card">
-            <div class="tag">挂号</div>
-            <p>"三甲医院挂号提前一周都抢不到，黄牛号贵3倍。"</p>
-        </div>
-        
-        <div class="cat-title">社交娱乐 <span>（3个）</span></div>
-        <div class="pain-card">
-            <div class="tag">微信</div>
-            <p>"工作群和生活群混一起，下班还要回消息，没有生活。"</p>
-        </div>
-    </section>
-
-    <!-- Testimonial -->
-    <section>
-        <h2>💬 早期用户说</h2>
-        <div class="quote">
-            "我发现了'会议记录'这个需求在知乎被提到300多次，而且没有好产品解决。这就是机会。"
-            <br><br>— 某创业产品经理
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <div class="cta">
-        <h2>🚀 联系我们</h2>
-        <p>如果你觉得这个方向有用，或者想了解更多</p>
-        <p style="margin-top:16px;font-size:1.1em;font-weight:600;">
-            微信号：W18514701881
-        </p>
-        <p style="margin-top:12px;font-size:0.9em;opacity:0.8;">
-            添加请备注「痛点」
-        </p>
-    </div>
-
-</div>
-
-<footer>
-    <p>🎯 痛点雷达 — 帮创业者找到用户抱怨最多的地方</p>
-    <p style="margin-top:8px;">最后更新：2026-04-15</p>
-</footer>
-
+        function renderResults(items) {
+            const container = document.getElementById('results');
+            document.getElementById('totalCount').textContent = items.length;
+            
+            if (items.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#888;padding:40px;">没有找到相关痛点</p>';
+                return;
+            }
+            
+            container.innerHTML = items.map(item => '
+                <div class="pain-card">
+                    <div class="header">
+                        <div class="title">' + item.title + '</div>
+                        <div class="badge">' + item.category + '</div>
+                    </div>
+                    <div class="content">' + item.content + '</div>
+                    <div class="pain-bar"><div class="fill" style="width:' + (item.pain_level * 10) + '%"></div></div>
+                    <div class="meta">
+                        <span>🔥 热度 ' + item.frequency + '</span>
+                        <span>📊 痛度 ' + item.pain_level + '/10</span>
+                        <span>💬 ' + item.platform + '</span>
+                    </div>
+                </div>
+            ').join('');
+        }
+    </script>
 </body>
 </html>
