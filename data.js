@@ -1,0 +1,114 @@
+// 痛点数据 - 真实案例
+var allData = [
+    // 生活服务
+    {id:1, keyword:"外卖", title:"外卖越来越贵", content:"同样的店，外卖比堂食贵3-10块，平台抽成越来越高，羊毛出在羊身上", platform:"微博/知乎", category:"生活服务", painLevel:9, frequency:856, trend:"上升"},
+    {id:2, keyword:"会员", title:"会员反而更贵", content:"开了视频会员后想听歌，发现还要单独付费。平台套娃收费越来越离谱", platform:"微博", category:"生活服务", painLevel:8, frequency:634, trend:"上升"},
+    {id:3, keyword:"自动续费", title:"订阅悄悄扣钱", content:"App自动续费没有任何提醒，取消订阅比注册还难10倍", platform:"黑猫投诉", category:"生活服务", painLevel:9, frequency:723, trend:"持平"},
+    {id:4, keyword:"退货", title:"退货比登天难", content:"说好7天无理由退货，实际退款要填一堆理由，还得自己出运费", platform:"黑猫投诉", category:"生活服务", painLevel:7, frequency:567, trend:"持平"},
+    {id:5, keyword:"好评", title:"好评都是假的", content:"买前看评价销量都很好，收货发现是刷的，追评全是广告", platform:"微博", category:"生活服务", painLevel:8, frequency:934, trend:"上升"},
+    {id:6, keyword:"客服", title:"客服是机器人", content:"智能客服听不懂人话，转人工要等30分钟，等到了还是解决不了", platform:"微博", category:"生活服务", painLevel:8, frequency:892, trend:"上升"},
+    
+    // 金融理财
+    {id:7, keyword:"信用卡", title:"信用卡年费陷阱", content:"说是刷几笔免年费，结果还是被扣了，客服说已经消费达标不能退", platform:"黑猫投诉", category:"金融理财", painLevel:8, frequency:445, trend:"下降"},
+    {id:8, keyword:"贷款", title:"网贷利息不明", content:"借5000实际到账4500，提前还款还要全额付利息，日利率宣传超低实际超高", platform:"知乎", category:"金融理财", painLevel:10, frequency:892, trend:"上升"},
+    
+    // 职场
+    {id:9, keyword:"加班", title:"加班没有加班费", content:"996工作制，美其名曰弹性工作制，实际加班到晚上11点也是应该的", platform:"知乎/微博", category:"职场", painLevel:10, frequency:1203, trend:"上升"},
+    {id:10, keyword:"裁员", title:"说裁就裁", content:"上午还在写代码，下午就通知被裁，赔偿金按最低工资算", platform:"知乎", category:"职场", painLevel:10, frequency:856, trend:"上升"},
+    
+    // 教育学习
+    {id:11, keyword:"培训贷", title:"培训即贷款", content:"求职培训班学费2万，结果是让你签贷款合同，学完根本找不到工作", platform:"黑猫投诉", category:"教育学习", painLevel:10, frequency:678, trend:"上升"},
+    {id:12, keyword:"知识付费", title:"课程注水严重", content:"1999买的课，进去发现是录播，内容搜索引擎都能找到免费", platform:"知乎", category:"教育学习", painLevel:7, frequency:445, trend:"持平"},
+    
+    // 健康医疗
+    {id:13, keyword:"挂号", title:"三甲医院挂号难", content:"提前一周抢号都抢不到，黄牛号贵3倍，凌晨排队也未必有", platform:"微博", category:"健康医疗", painLevel:9, frequency:723, trend:"持平"},
+    {id:14, keyword:"过度检查", title:"过度检查", content:"感冒发烧抽血+X光+CT，一套检查下来500块没了，药才几十块", platform:"知乎", category:"健康医疗", painLevel:8, frequency:534, trend:"上升"},
+    
+    // 出行
+    {id:15, keyword:"打车", title:"打车越来越贵", content:"同样的路程，工作日早晚高峰比平时贵2倍，优惠券越来越少", platform:"知乎", category:"出行", painLevel:8, frequency:756, trend:"上升"},
+    {id:16, keyword:"机票", title:"机票价格欺诈", content:"同一航班不同手机价格不同，搜索一次涨一次价，平台大数据杀熟", platform:"黑猫投诉", category:"出行", painLevel:9, frequency:623, trend:"上升"},
+    
+    // 娱乐
+    {id:17, keyword:"游戏", title:"充值退款难", content:"未成年人充值退款要举证是孩子充的，成年人充值更别想退", platform:"黑猫投诉", category:"娱乐", painLevel:8, frequency:534, trend:"持平"},
+    {id:18, keyword:"短视频", title:"算法让人上瘾", content:"刷短视频停不下来，一刷2小时没了，什么都没记住，时间被偷走", platform:"知乎", category:"娱乐", painLevel:6, frequency:1234, trend:"上升"},
+    
+    // 科技
+    {id:19, keyword:"App", title:"App越来越臃肿", content:"一个记账App要通讯录、位置、相机所有权限，不给就用不了", platform:"知乎", category:"科技", painLevel:7, frequency:445, trend:"上升"},
+    {id:20, keyword:"隐私", title:"隐私被卖", content:"刚在电商搜的东西，社交App就推送相关广告，手机比你自己还了解你", platform:"微博", category:"科技", painLevel:8, frequency:823, trend:"上升"},
+    
+    // 服务
+    {id:21, keyword:"快递", title:"快递不送上门", content:"明明付了运费，快递员不打电话就放驿站，有时放代收点要走10分钟", platform:"微博", category:"服务", painLevel:7, frequency:634, trend:"上升"}
+];
+
+var currentCategory = "all";
+var currentSearch = "";
+
+function filterResults() {
+    currentSearch = document.getElementById("searchInput").value.toLowerCase();
+    applyFilters();
+}
+
+function filterByCategory(cat) {
+    currentCategory = cat;
+    var pills = document.querySelectorAll(".cat-pill");
+    for (var i = 0; i < pills.length; i++) {
+        pills[i].classList.remove("active");
+        if (pills[i].getAttribute("data-cat") === cat) {
+            pills[i].classList.add("active");
+        }
+    }
+    applyFilters();
+}
+
+function applyFilters() {
+    var filtered = [];
+    for (var i = 0; i < allData.length; i++) {
+        var item = allData[i];
+        if (currentCategory !== "all" && item.category !== currentCategory) continue;
+        if (currentSearch) {
+            var searchText = (item.title + " " + item.content + " " + item.keyword).toLowerCase();
+            if (searchText.indexOf(currentSearch) === -1) continue;
+        }
+        filtered.push(item);
+    }
+    renderResults(filtered);
+}
+
+function renderResults(items) {
+    var container = document.getElementById("results");
+    
+    if (items.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>没有找到相关痛点</p></div>';
+        return;
+    }
+    
+    var html = "";
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        html += '<div class="pain-card">';
+        html += '<div class="pain-header">';
+        html += '<div class="pain-title">' + item.title + '</div>';
+        html += '<div class="pain-badge">' + item.category + '</div>';
+        html += '</div>';
+        html += '<div class="pain-content">' + item.content + '</div>';
+        html += '<div class="pain-bar"><div class="pain-bar-fill" style="width:' + (item.painLevel * 10) + '%"></div></div>';
+        html += '<div class="pain-meta">';
+        html += '<span>💬 ' + item.frequency + ' 讨论</span>';
+        html += '<span>📊 痛度 ' + item.painLevel + '/10</span>';
+        html += '<span>💬 ' + item.platform + '</span>';
+        html += '</div>';
+        html += '</div>';
+    }
+    container.innerHTML = html;
+}
+
+// Setup category click handlers
+var pills = document.querySelectorAll(".cat-pill");
+for (var i = 0; i < pills.length; i++) {
+    pills[i].addEventListener("click", function() {
+        filterByCategory(this.getAttribute("data-cat"));
+    });
+}
+
+// Initial render
+renderResults(allData);
