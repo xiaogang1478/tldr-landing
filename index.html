@@ -3,74 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>痛点雷达 - MVP</title>
+    <title>痛点雷达 - 帮你找到用户抱怨最多的地方</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333}
-        .container{max-width:900px;margin:0 auto;padding:20px}
-        header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:40px 20px;text-align:center;border-radius:12px;margin-bottom:24px}
-        header h1{font-size:2em;margin-bottom:12px}
-        header p{opacity:0.9;font-size:1.1em}
-        .search-box{background:white;padding:24px;border-radius:12px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-        .search-box input{width:100%;padding:16px;font-size:1.1em;border:2px solid #eee;border-radius:8px;outline:none;transition:border-color 0.2s}
-        .search-box input:focus{border-color:#667eea}
-        .stats{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap}
-        .stat-card{flex:1;min-width:120px;background:white;padding:20px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
-        .stat-card .number{font-size:2em;font-weight:700;color:#667eea}
-        .stat-card .label{color:#888;font-size:0.9em;margin-top:4px}
-        .categories{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
-        .cat-tag{padding:8px 16px;background:white;border:1px solid #eee;border-radius:20px;cursor:pointer;transition:all 0.2s}
-        .cat-tag:hover,.cat-tag.active{background:#667eea;color:white;border-color:#667eea}
-        .results{display:flex;flex-direction:column;gap:16px}
-        .pain-card{background:white;padding:24px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);border-left:4px solid #667eea}
-        .pain-card .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-        .pain-card .title{font-size:1.1em;font-weight:600;color:#1a1a1a}
-        .pain-card .badge{padding:4px 12px;background:#667eea;color:white;border-radius:12px;font-size:0.8em}
-        .pain-card .content{color:#555;margin-bottom:12px;line-height:1.6}
-        .pain-card .meta{display:flex;gap:16px;color:#888;font-size:0.85em}
-        .pain-bar{width:100%;height:6px;background:#eee;border-radius:3px;margin-top:12px}
-        .pain-bar .fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:3px}
-        footer{text-align:center;padding:40px;color:#888;font-size:0.85em}
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --text-primary: #fafafa;
+            --text-secondary: #888;
+            --accent: #ff6b35;
+            --accent-alt: #ffb347;
+            --border: #2a2a2a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 600px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(255,107,53,0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 32px;
+        }
+        
+        .hero-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+        
+        .hero h1 .highlight {
+            color: var(--accent);
+            position: relative;
+        }
+        
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin-bottom: 48px;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #ff8c5a;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--text-secondary);
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 80px 0;
+        }
+        
+        .stat-item {
+            background: var(--bg-secondary);
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        
+        /* Search Section */
+        .search-section {
+            margin: 60px 0;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 24px 24px 24px 64px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .search-box input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .search-box input:focus {
+            border-color: var(--accent);
+        }
+        
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+        
+        /* Category Pills */
+        .categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        
+        .cat-pill {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cat-pill:hover, .cat-pill.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+        
+        /* Results */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 60px 0;
+        }
+        
+        .pain-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.2s;
+        }
+        
+        .pain-card:hover {
+            border-color: var(--accent);
+            transform: translateX(8px);
+        }
+        
+        .pain-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .pain-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .pain-badge {
+            padding: 6px 14px;
+            background: var(--bg-secondary);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .pain-content {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .pain-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .pain-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .pain-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+        
+        .pain-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Quote Section */
+        .quote-section {
+            margin: 100px 0;
+            text-align: center;
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .quote-text {
+            font-size: 1.75rem;
+            font-weight: 500;
+            max-width: 700px;
+            margin: 0 auto 24px;
+            line-height: 1.5;
+        }
+        
+        .quote-author {
+            color: var(--text-secondary);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            margin: 100px 0;
+            text-align: center;
+            padding: 80px 40px;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+        }
+        
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+        
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .wechat-id {
+            display: inline-block;
+            padding: 16px 32px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero {
+                padding: 80px 0 60px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>&#128293; 痛点雷达 MVP</h1>
-            <p>帮你找到用户抱怨最多的地方</p>
-        </header>
-        
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="搜索关键词，如：笔记、外卖、客服..." oninput="filterResults()">
-        </div>
-        
-        <div class="stats">
-            <div class="stat-card">
-                <div class="number" id="totalCount">10</div>
-                <div class="label">痛点总数</div>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-label">内测中</div>
+            <h1>找到用户<br><span class="highlight">抱怨最多</span>的地方</h1>
+            <p class="hero-sub">痛点雷达挖掘全网真实用户抱怨，帮你发现创业机会。哪里用户最不满，哪里就有机会。</p>
+            <div class="hero-cta">
+                <a href="#search" class="btn btn-primary">开始探索 →</a>
+                <a href="#about" class="btn btn-secondary">了解更多</a>
             </div>
-            <div class="stat-card">
-                <div class="number">6</div>
-                <div class="label">覆盖行业</div>
+        </section>
+        
+        <!-- Stats -->
+        <section class="stats-bar" id="about">
+            <div class="stat-item">
+                <div class="stat-number">10</div>
+                <div class="stat-label">真实痛点案例</div>
             </div>
-            <div class="stat-card">
-                <div class="number">1256+</div>
-                <div class="label">数据来源</div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">覆盖行业</div>
             </div>
-        </div>
+            <div class="stat-item">
+                <div class="stat-number">1</div>
+                <div class="stat-label">AI分析引擎</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0</div>
+                <div class="stat-label">付费门槛</div>
+            </div>
+        </section>
         
-        <div class="categories" id="categories">
-            <div class="cat-tag active" data-cat="all">全部</div>
-            <div class="cat-tag" data-cat="效率工具">效率工具</div>
-            <div class="cat-tag" data-cat="生活服务">生活服务</div>
-            <div class="cat-tag" data-cat="金融理财">金融理财</div>
-            <div class="cat-tag" data-cat="教育学习">教育学习</div>
-            <div class="cat-tag" data-cat="健康医疗">健康医疗</div>
-            <div class="cat-tag" data-cat="社交娱乐">社交娱乐</div>
-        </div>
+        <!-- Search -->
+        <section class="search-section" id="search">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜索关键词，如：笔记、外卖、客服..." oninput="filterResults()">
+            </div>
+            <div class="categories">
+                <div class="cat-pill active" data-cat="all">全部</div>
+                <div class="cat-pill" data-cat="效率工具">效率工具</div>
+                <div class="cat-pill" data-cat="生活服务">生活服务</div>
+                <div class="cat-pill" data-cat="金融理财">金融理财</div>
+                <div class="cat-pill" data-cat="教育学习">教育学习</div>
+                <div class="cat-pill" data-cat="健康医疗">健康医疗</div>
+                <div class="cat-pill" data-cat="社交娱乐">社交娱乐</div>
+            </div>
+        </section>
         
-        <div class="results" id="results"></div>
+        <!-- Results -->
+        <section class="results" id="results"></section>
         
+        <!-- Quote -->
+        <section class="quote-section">
+            <p class="quote-text">"创业的本质，不是创造新东西，而是让用户的不满意消失。"</p>
+            <p class="quote-author">— 痛点雷达</p>
+        </section>
+        
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>想了解更多？</h2>
+            <p>如果你觉得这个方向有用，或者想参与内测</p>
+            <div class="wechat-id">微信号：W18514701881</div>
+            <p style="margin-top: 12px; font-size: 0.85rem;">添加请备注「痛点」</p>
+        </section>
+        
+        <!-- Footer -->
         <footer>
             <p>痛点雷达 MVP - 数据来源：知乎/微博/即刻</p>
         </footer>
@@ -100,11 +495,11 @@
         
         function filterByCategory(cat) {
             currentCategory = cat;
-            var tags = document.querySelectorAll(".cat-tag");
-            for (var i = 0; i < tags.length; i++) {
-                tags[i].classList.remove("active");
-                if (tags[i].getAttribute("data-cat") === cat) {
-                    tags[i].classList.add("active");
+            var pills = document.querySelectorAll(".cat-pill");
+            for (var i = 0; i < pills.length; i++) {
+                pills[i].classList.remove("active");
+                if (pills[i].getAttribute("data-cat") === cat) {
+                    pills[i].classList.add("active");
                 }
             }
             applyFilters();
@@ -126,37 +521,36 @@
         
         function renderResults(items) {
             var container = document.getElementById("results");
-            document.getElementById("totalCount").textContent = items.length;
             
             if (items.length === 0) {
-                container.innerHTML = "<p style=\"text-align:center;color:#888;padding:40px\">没有找到相关痛点</p>";
+                container.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p>没有找到相关痛点</p></div>';
                 return;
             }
             
             var html = "";
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
-                html += "<div class=\"pain-card\">";
-                html += "<div class=\"header\">";
-                html += "<div class=\"title\">" + item.title + "</div>";
-                html += "<div class=\"badge\">" + item.category + "</div>";
-                html += "</div>";
-                html += "<div class=\"content\">" + item.content + "</div>";
-                html += "<div class=\"pain-bar\"><div class=\"fill\" style=\"width:" + (item.painLevel * 10) + "%\"></div></div>";
-                html += "<div class=\"meta\">";
-                html += "<span>&#128293; 热度 " + item.frequency + "</span>";
-                html += "<span>&#128202; 痛度 " + item.painLevel + "/10</span>";
-                html += "<span>&#128172; " + item.platform + "</span>";
-                html += "</div>";
-                html += "</div>";
+                html += '<div class="pain-card">';
+                html += '<div class="pain-header">';
+                html += '<div class="pain-title">' + item.title + '</div>';
+                html += '<div class="pain-badge">' + item.category + '</div>';
+                html += '</div>';
+                html += '<div class="pain-content">' + item.content + '</div>';
+                html += '<div class="pain-bar"><div class="pain-bar-fill" style="width:' + (item.painLevel * 10) + '%"></div></div>';
+                html += '<div class="pain-meta">';
+                html += '<span>&#128293; ' + item.frequency + ' 讨论</span>';
+                html += '<span>&#128202; 痛度 ' + item.painLevel + '/10</span>';
+                html += '<span>&#128172; ' + item.platform + '</span>';
+                html += '</div>';
+                html += '</div>';
             }
             container.innerHTML = html;
         }
         
         // Setup category click handlers
-        var catTags = document.querySelectorAll(".cat-tag");
-        for (var i = 0; i < catTags.length; i++) {
-            catTags[i].addEventListener("click", function() {
+        var pills = document.querySelectorAll(".cat-pill");
+        for (var i = 0; i < pills.length; i++) {
+            pills[i].addEventListener("click", function() {
                 filterByCategory(this.getAttribute("data-cat"));
             });
         }
